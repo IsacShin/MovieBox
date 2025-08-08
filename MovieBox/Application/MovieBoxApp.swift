@@ -9,9 +9,20 @@ import SwiftUI
 
 @main
 struct MovieBoxApp: App {
+    @StateObject private var navigationManager = NavigationStackManager.shared
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack(path: $navigationManager.path) {
+                HomeView()
+                    .environment(\.navigationManager, navigationManager)
+                    .navigationDestination(for: Route.self) { route in
+                        switch route {
+                        case .movieDetail:
+                            EmptyView()
+                        }
+                    }
+            }
         }
     }
 }
