@@ -18,7 +18,9 @@ struct MovieBoxApp: App {
                     .environment(\.navigationManager, navigationManager)
                     .navigationDestination(for: Route.self) { route in
                         switch route {
-                        case .movieDetail:
+                        case .myList:
+                            MyListView()
+                        default:
                             EmptyView()
                         }
                     }

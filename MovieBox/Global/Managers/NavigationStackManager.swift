@@ -21,12 +21,12 @@ extension EnvironmentValues {
 
 enum Route: Hashable {
     case movieDetail
+    case myList
 }
 
 @MainActor
 public final class NavigationStackManager: ObservableObject {
     public static let shared = NavigationStackManager() // 싱글톤 인스턴스
-    
     @Published var path = NavigationPath()
     
     private init() {}

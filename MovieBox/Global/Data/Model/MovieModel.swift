@@ -18,7 +18,7 @@ struct MovieResponse: Decodable {
 // MARK: - Movie
 /// TMBD API 의 개별 영화 데이터를 표현하는 모델
 /// API 응답에서 개별 영화 정보를 파싱하는데 사용됨
-struct Movie: Identifiable, Decodable, Equatable {
+struct Movie: Identifiable, Decodable, Equatable, Hashable {
     
     // Properties
     let id: Int  // 영화 고유 ID
