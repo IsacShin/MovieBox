@@ -11,16 +11,17 @@ struct MyListView: View {
     
     @StateObject private var viewModel = MyListViewModel()
     @State private var showDetailView: Bool = false
-
+    
     var body: some View {
         ZStack {
             Color.ccBlack
                 .ignoresSafeArea()
-            
             ScrollView {
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 10),
-                                    GridItem(.flexible(), spacing: 10),
-                                    GridItem(.flexible(), spacing: 10)], spacing: 10) {
+                
+                
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3),
+                          spacing: 10) {
+                    
                     ForEach(viewModel.favoriteMovies) { movie in
                         ZStack {
                             AsyncImage(url: movie.posterURL) { phase in
@@ -31,17 +32,20 @@ struct MyListView: View {
                                 case .success(let image):
                                     image
                                         .resizable()
-                                        .aspectRatio(contentMode: .fill)
                                 default:
                                     EmptyView()
                                 }
                             }
-                            .frame(height: 200)
                             .clipped()
                             .overlay {
                                 LinearGradient(colors: [.black.opacity(0.1), .black.opacity(0.3)], startPoint: .top, endPoint: .bottom)
                             }
-
+                            .frame(height: 200)
+                            .onTapGesture {
+                                viewModel.selectMovie(movie)
+                                showDetailView.toggle()
+                            }
+                            
                             VStack {
                                 Spacer()
                                 Text(movie.title ?? "")
@@ -51,14 +55,20 @@ struct MyListView: View {
                             }
                             .padding()
                             
-                        }
-                        .onTapGesture {
-                            viewModel.selectMovie(movie)
-                            showDetailView.toggle()
+                            Button(action: {
+                                viewModel.deleteMovie(movie)
+                            }) {
+                                Image(systemName: "trash.fill")
+                                    .foregroundStyle(.ccWhite)
+                                    .padding(8)
+                                    .background(Color.red.opacity(0.7))
+                                    .clipShape(Circle())
+                            }
                         }
                     }
                 }
             }
+
         }
         .onAppear {
             let appearance = UINavigationBarAppearance()

@@ -37,6 +37,14 @@ final class CoreDataManager {
     
     /// 영화 데이터를 Core Data 에 추가
     func addMovie(_ movie: Movie) {
+        // 중복 검사: 이미 같은 id가 있는지 확인
+        let fetchRequest: NSFetchRequest<MovieData> = MovieData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %d", movie.id)
+        if let existingMovies = try? context.fetch(fetchRequest), !existingMovies.isEmpty {
+            // 이미 존재하면 추가하지 않음
+            return
+        }
+
         let myMovie = MovieData(context: context)
         myMovie.id = Int64(movie.id)
         myMovie.title = movie.title
@@ -77,4 +85,3 @@ extension MovieData {
         return nil
     }
 }
-

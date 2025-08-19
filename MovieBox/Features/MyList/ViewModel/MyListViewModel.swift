@@ -31,7 +31,9 @@ final class MyListViewModel: ObservableObject {
     
     func deleteMovie(_ movie: MovieData) {
         coreDataManager.deleteMovie(movie)
-        favoriteMovies.removeAll { $0.id == movie.id }
+        Task {
+            await fetchFavoriteMovies()
+        }
     }
     
     func selectMovie(_ movie: MovieData) {
